@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/users', require('./routes/userRoutes'))
+app.use('/api/songs', require('./routes/songRoutes'))
 
 app.use(errorHandler) // lets us use middleware
 
