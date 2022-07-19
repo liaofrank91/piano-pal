@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 // create a repertoireSchema instance every time a new user is registered
 const repertoireSchema = mongoose.Schema({
-    user: {
+    email: {
         type: String,
         required: [true, 'Please add a user for this repertoire'],
     },

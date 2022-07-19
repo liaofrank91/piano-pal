@@ -6,27 +6,27 @@ const Repertoire = require('../models/repertoireModel')
 // @route   /api/repertoire/create
 // @access  Public
 const createRepertoire = asyncHandler(async (req, res) => {
-    const { user } = req.body
+    const { email } = req.body
 
     // Check if the user information is present
-    if (!user) {
+    if (!email) {
         res.status(400)
         throw new Error("Please include the user")
     }
 
     // Check if there's already a repertoire for this user
-    let alreadyExists = await Repertoire.findOne({ user })
+    let alreadyExists = await Repertoire.findOne({ email })
     if (alreadyExists) {
         res.status(400)
         throw new Error("There is already a repertoire for this user")
     }
 
-    const repertoire = await Repertoire.create({ user, songIdArray: [] })
+    const repertoire = await Repertoire.create({ email, songIdArray: [] })
 
     if (repertoire) {
         res.status(201).json({
             _id: repertoire._id,
-            user: repertoire.user,
+            email: repertoire.email,
             songIdArray: repertoire.songIdArray,
         })
     } else {
@@ -39,15 +39,15 @@ const createRepertoire = asyncHandler(async (req, res) => {
 // @route   /api/repertoire/add
 // @access  Public
 const addToRepertoire = asyncHandler(async (req, res) => {
-    const { newSongId, userId } = req.body
+    const { newSongId, email } = req.body
 
-    if (!newSongId || !userId) {
+    if (!newSongId || !email) {
         res.status(400)
-        throw new Error("Please include both the newSongId and userId")
+        throw new Error("Please include both the newSongId and user's email")
     }
 
     // Find the right repertoire object
-    const repertoire = await Repertoire.findOne({ user: userId })
+    const repertoire = await Repertoire.findOne({ email })
     console.log(repertoire)
     // Note down what's currently in the repertoire's songIdArray 
     const newSongIdArray = repertoire.songIdArray
@@ -55,7 +55,7 @@ const addToRepertoire = asyncHandler(async (req, res) => {
     // If the repertoire they're looking for doesn't exist
     if (!repertoire) {
         res.status(400)
-        throw new Error("Please double check your userId")
+        throw new Error("Please double check your email")
     }
 
     // Check if the songId is already in the songIdArray
@@ -82,20 +82,20 @@ const addToRepertoire = asyncHandler(async (req, res) => {
 // @route   /api/repertoire/remove
 // @access  Public
 const removeFromRepertoire = asyncHandler(async (req, res) => {
-    const { newSongId, userId } = req.body
+    const { newSongId, email } = req.body
 
-    if (!newSongId || !userId) {
+    if (!newSongId || !email) {
         res.status(400)
-        throw new Error("Please include both the newSongId and userId")
+        throw new Error("Please include both the newSongId and user's email")
     }
 
     // Find the right repertoire object
-    const repertoire = await Repertoire.findOne({ user: userId })
+    const repertoire = await Repertoire.findOne({ email })
 
     // If the repertoire they're looking for doesn't exist
     if (!repertoire) {
         res.status(400)
-        throw new Error("Please double check your userId")
+        throw new Error("Please double check your email")
     }
 
     // Check if the songId is actually in the songIdArray
