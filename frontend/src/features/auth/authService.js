@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const API_URL = '/api/users/'
+const AUTH_API_URL = '/api/users/'
 
 // Register user
 const register = async (userData) => {
-    const response = await axios.post(API_URL, userData)
+    const response = await axios.post(AUTH_API_URL, userData)
 
     if (response.data) {
         // Create a repertoire for the user when they register for the first time
@@ -17,7 +17,7 @@ const register = async (userData) => {
 
 // Login user
 const login = async (userData) => {
-    const response = await axios.post(API_URL + 'login', userData)
+    const response = await axios.post(AUTH_API_URL + 'login', userData)
 
     if (response.data) {
         localStorage.setItem('user', JSON.stringify(response.data))

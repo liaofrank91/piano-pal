@@ -44,7 +44,7 @@ function Login() {
     }))
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
 
     const userData = {

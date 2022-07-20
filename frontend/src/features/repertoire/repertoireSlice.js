@@ -12,18 +12,18 @@ const initialState = {
 }
 
 // Add to repertoire
-export const addToRepertoire = createAsyncThunk('repertoire/add', async (user, thunkAPI) => {
-    // try {
-    //     return await authService.register(user)
-    // } catch (error) {
-    //     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+export const addToRepertoire = createAsyncThunk('repertoire/add', async (songData, thunkAPI) => {
+    try {
+        return await repertoireService.addToRepertoire(songData)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
 
-    //     return thunkAPI.rejectWithValue(message)
-    // }
+        return thunkAPI.rejectWithValue(message)
+    }
 })
 
 // Remove from repertoire
-export const login = createAsyncThunk('repertoire/remove', async (user, thunkAPI) => {
+export const removeFromRepertoire = createAsyncThunk('repertoire/remove', async (user, thunkAPI) => {
     // try {
     //     return await authService.login(user)
     // } catch (error) {
@@ -45,39 +45,39 @@ export const repertoireSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder
-            // .addCase(register.pending, (state) => {
-            //     state.isLoading = true
-            // })
-            // .addCase(register.fulfilled, (state, action) => {
-            //     state.isLoading = false
-            //     state.isSuccess = true
-            //     state.user = action.payload
-            //     // :0 I'm pretty sure action is tied to to the register function, which was a function constructed with createAsyncThunk, and the action.payload is the return value 
-            // })
-            // .addCase(register.rejected, (state, action) => {
-            //     state.isLoading = false
-            //     state.isError = true
-            //     state.message = action.payload
-            //     state.user = null
-            // })
-            // .addCase(login.pending, (state) => {
-            //     state.isLoading = true
-            // })
-            // .addCase(login.fulfilled, (state, action) => {
-            //     state.isLoading = false
-            //     state.isSuccess = true
-            //     state.user = action.payload
-            // })
-            // .addCase(login.rejected, (state, action) => {
-            //     state.isLoading = false
-            //     state.isError = true
-            //     state.message = action.payload
-            //     state.user = null
-            // })
-            // .addCase(logout.fulfilled, (state) => {
-            //     state.user = null
-            // })
+        // builder
+        //     .addCase(register.pending, (state) => {
+        //         state.isLoading = true
+        //     })
+        //     .addCase(register.fulfilled, (state, action) => {
+        //         state.isLoading = false
+        //         state.isSuccess = true
+        //         state.user = action.payload
+        //         // :0 I'm pretty sure action is tied to to the register function, which was a function constructed with createAsyncThunk, and the action.payload is the return value 
+        //     })
+        //     .addCase(register.rejected, (state, action) => {
+        //         state.isLoading = false
+        //         state.isError = true
+        //         state.message = action.payload
+        //         state.user = null
+        //     })
+        //     .addCase(login.pending, (state) => {
+        //         state.isLoading = true
+        //     })
+        //     .addCase(login.fulfilled, (state, action) => {
+        //         state.isLoading = false
+        //         state.isSuccess = true
+        //         state.user = action.payload
+        //     })
+        //     .addCase(login.rejected, (state, action) => {
+        //         state.isLoading = false
+        //         state.isError = true
+        //         state.message = action.payload
+        //         state.user = null
+        //     })
+        //     .addCase(logout.fulfilled, (state) => {
+        //         state.user = null
+        //     })
     }
 })
 

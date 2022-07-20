@@ -58,6 +58,8 @@ const addToRepertoire = asyncHandler(async (req, res) => {
         throw new Error("Please double check your email")
     }
 
+    // CHECKING alreadyExists IS REDUNDANT: IF I CREATE A NEW SONG IT WILL GENERATE A NEW ID FOR THE NEW SONG DOCUMENT EVEN IF ALL THE INPUTTED FIELDS ARE EXACTLY THE SAME. Remove when 100% sure not needed for some other functionality
+    // ------------------------------------------------------------------------------------------------------------------
     // Check if the songId is already in the songIdArray
     let alreadyExists = false;
     repertoire.songIdArray.forEach((songId) => {
