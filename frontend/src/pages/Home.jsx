@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import { useSelector, useDispatch } from 'react-redux'
-import { addToRepertoire } from '../features/repertoire/repertoireSlice'
+import { addToRepertoire, getRepertoire } from '../features/repertoire/repertoireSlice'
 import SongComponent from '../components/SongComponent'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -63,7 +63,6 @@ function Home() {
       }
       dispatch(addToRepertoire(songData))
       closeAddModal()
-
     }
 
   }
@@ -84,6 +83,14 @@ function Home() {
     setRemoveModalIsOpen(true)
   }
   const closeRemoveModal = () => setRemoveModalIsOpen(false)
+
+  useEffect(() => {
+    console.log(user.email)
+    const userInfo = {
+      email: user.email
+    }
+    dispatch(getRepertoire(userInfo))
+  })
 
   return (
     <>

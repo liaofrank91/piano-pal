@@ -59,7 +59,7 @@ export const authSlice = createSlice({
                 state.isLoading = false
                 state.isSuccess = true
                 state.user = action.payload
-                // :0 I'm pretty sure action is tied to to the register function, which was a function constructed with createAsyncThunk, and the action.payload is the return value 
+                // :0 I'm pretty sure action is tied to to the register function (which was a function constructed with createAsyncThunk) and the action.payload is the return value 
             })
             .addCase(register.rejected, (state, action) => {
                 state.isLoading = false

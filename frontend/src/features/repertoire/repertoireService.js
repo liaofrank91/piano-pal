@@ -15,10 +15,28 @@ const addToRepertoire = async (songData) => {
         newSongId: songResponse.data._id,
         email: songData.email
     }
-    console.log(songResponse._id, songData.email)
+    console.log(songResponse.data._id, songData.email)
     const response = await axios.put(REPERTOIRE_API_URL + 'add', addToRepertoireInfo)
     return response.data
 }
+
+// Get repertoire
+const getRepertoire = async (repertoireData) => {
+    console.log('before')
+    console.log(repertoireData.email)
+    // Something goes wrong with the next line
+    const repertoireResponse = await axios.get(REPERTOIRE_API_URL + 'get', {
+        headers: {
+            'email': repertoireData.email
+        }
+    })
+    console.log('after')
+    console.log(repertoireResponse.data)
+
+    return repertoireResponse.data
+
+}
+
 
 // Remove from repertoire
 const removeFromRepertoire = async (userData) => {
@@ -35,6 +53,7 @@ const removeFromRepertoire = async (userData) => {
 
 const repertoireService = {
     addToRepertoire,
+    getRepertoire,
     removeFromRepertoire,
 }
 

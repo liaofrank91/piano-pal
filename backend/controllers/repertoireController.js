@@ -35,6 +35,34 @@ const createRepertoire = asyncHandler(async (req, res) => {
     }
 })
 
+// @desc    Get a user's repertoire
+// @route   /api/repertoire/get
+// @access  Public
+const getRepertoire = asyncHandler(async (req, res) => {
+    const email = req.get('email')
+    console.log(email, 'got it?')
+
+    // Check if the user information is present
+    if (!email) {
+        res.status(400)
+        throw new Error("Please include the user")
+    }
+
+    const repertoire = await Repertoire.findOne({ email })
+
+    if (repertoire) {
+        console.log(repertoire)
+        res.status(201).json({
+            _id: repertoire._id,
+            email: repertoire.email,
+            songIdArray: repertoire.songIdArray,
+        })
+    } else {
+        res.status(400)
+        throw new Error('Something went wrong...??')
+    }
+})
+
 // @desc    Add to a repertoire
 // @route   /api/repertoire/add
 // @access  Public
@@ -76,7 +104,7 @@ const addToRepertoire = asyncHandler(async (req, res) => {
         // Update the songIdArray
         repertoire.songIdArray = newSongIdArray
         await repertoire.save()
-        res.status(201).json(repertoire)
+        res.status(200).json(repertoire)
     }
 })
 
@@ -114,12 +142,13 @@ const removeFromRepertoire = asyncHandler(async (req, res) => {
     } else {
         repertoire.songIdArray = repertoire.songIdArray.filter(song => (song !== newSongId))
         await repertoire.save()
-        res.status(201).json(repertoire)
+        res.status(200).json(repertoire)
     }
 })
 
 module.exports = {
     createRepertoire,
+    getRepertoire,
     addToRepertoire,
     removeFromRepertoire
 }

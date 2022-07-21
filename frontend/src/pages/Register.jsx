@@ -33,7 +33,7 @@ function Register() {
     }
 
     // Redirect when logged in 
-    if (isSuccess || user ) {
+    if (isSuccess || user) {
       navigate('/')
     }
 
@@ -71,7 +71,7 @@ function Register() {
 
   return (
     <>
-      <h1 style={{fontSize: 40}}>Register</h1>
+      <h1 style={{ fontSize: 40 }}>Register</h1>
       <div className='flex flex-col items-center'>
         <form onSubmit={onSubmit}>
           <TextField id="standard-basic" type='text' label="Name" variant="standard" value={name} onChange={onChange} name='name' required />
