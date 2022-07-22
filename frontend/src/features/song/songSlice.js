@@ -1,3 +1,4 @@
+import { create } from '@mui/material/styles/createTransitions'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import songService from './songService'
 
@@ -6,6 +7,7 @@ const user = JSON.parse(localStorage.getItem('user'))
 
 const initialState = {
     songList: null,
+    specificSong: null,
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -32,6 +34,17 @@ export const removeSong = createAsyncThunk('songs/removeSong', async(songId, thu
     }
 })
 
+// Get a specific song
+export const getSong = createAsyncThunk('songs/getSong', async(songId, thunkAPI) => {
+    try {
+        return await songService.getSong(songId)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 export const songSlice = createSlice({
     name: 'song',
@@ -52,6 +65,14 @@ export const songSlice = createSlice({
             .addCase(getSongsByUser.fulfilled, (state, action) => {
                 state.songList = action.payload
                 state.isLoading = false
+            })
+            .addCase(getSong.pending, (state, action) => {
+                state.isLoading = true
+            })
+            .addCase(getSong.fulfilled, (state, action) => {
+                state.specificSong = action.payload
+                state.isLoading = false
+                state.isSuccess = true
             })
     }
 })

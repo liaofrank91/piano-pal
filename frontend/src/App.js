@@ -27,7 +27,7 @@ function App() {
             </Route>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/song/:songId' element={<Spinner />} />
+            <Route path='/song/:songId' element={<SongPage />} />
 
           </Routes>
 

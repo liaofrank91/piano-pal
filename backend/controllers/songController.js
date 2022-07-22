@@ -40,7 +40,7 @@ const createSong = asyncHandler(async (req, res) => {
 })
 
 // @desc    Remove a song instance
-// @route   /api/songs/remove
+// @route   /api/songs/remove/:songId
 // @access  Public
 const removeSong = asyncHandler(async (req, res) => {
     const songId = req.params.songId
@@ -82,8 +82,29 @@ const getSongsByUser = asyncHandler(async (req, res) => {
 
 })
 
+// @desc    Get song by songId
+// @route   /api/songs/get/:songId
+// @access  Public
+const getSong = asyncHandler(async (req, res) => {
+    const songId = req.params.songId
+
+    if (!songId) {
+        res.status(400)
+        throw new Error("Please include the songId")
+    }
+
+    const song = await Song.findOne({ _id: songId })
+
+    if (song) {
+        res.status(200).json(song)
+    } else {
+        throw new Error("Something went wrong with getting the song")
+    }
+})
+
 module.exports = {
     createSong,
     getSongsByUser,
     removeSong,
+    getSong
 }

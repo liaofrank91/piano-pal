@@ -14,10 +14,10 @@ const songSchema = mongoose.Schema({
         required: [true, 'Please add the composer/artist']
     },
     notes: {
-        type: [{ date: Date, miscNotes: String, bars: String }],
+        type: [{ date: String, miscNotes: String, bars: String }],
     },
     practiceTime: {
-        type: [{date: Date, timeAchieved: Number}],
+        type: [{date: String, timeAchieved: Number}],
     },
     practiceTimeGoal: {
         type: Number,
