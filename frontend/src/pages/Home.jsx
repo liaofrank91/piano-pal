@@ -1,14 +1,22 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
 import { useSelector, useDispatch } from 'react-redux'
 import { addToRepertoire, getRepertoire } from '../features/repertoire/repertoireSlice'
+import { getSongsByUser, removeSong } from '../features/song/songSlice'
 import SongComponent from '../components/SongComponent'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Select from '@mui/material/Select'
 import { toast } from 'react-toastify'
+import Spinner from '../components/Spinner'
+
 
 const customStyles = {
   content: {
@@ -26,11 +34,6 @@ const customStyles = {
 Modal.setAppElement('#root')
 
 function Home() {
-  const [songList, setSongList] = useState([
-    { user: '62ca462601f99e2dbe20a850', title: 'Ballade No. 1', composer: 'Frederic Chopin', id: '62cba101f1d4184d348a8fa7' },
-    { user: '62ca462601f99e2dbe20a850', title: 'Akuma no Ko', composer: 'Animenz', id: '62cba18bf1d4184d348a8fad' },
-    { user: '62ca462601f99e2dbe20a850', title: 'Orange', composer: 'James Chou', id: '62cba20b717763331e46b743' },
-  ])
   const [addModalIsOpen, setAddModalIsOpen] = useState(false)
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false)
   const [addForm, setAddForm] = useState({
@@ -38,10 +41,13 @@ function Home() {
     composer: '',
     practiceTimeGoal: 0,
   })
+  const [toBeRemoved, setToBeRemoved] = useState('')
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const { user } = useSelector((state) => state.auth)
+  const { songList, isLoading } = useSelector((state) => state.song)
 
   const onChange = (e) => {
     setAddForm({
@@ -51,7 +57,7 @@ function Home() {
   }
 
   const handleAddSubmit = (e) => {
-    e.preventDefault()
+    // e.preventDefault()
 
     if (addForm.practiceTimeGoal <= 0) {
       toast.error('Please enter a valid practice goal')
@@ -63,13 +69,17 @@ function Home() {
       }
       dispatch(addToRepertoire(songData))
       closeAddModal()
+      window.location.reload()
     }
 
   }
 
   const handleRemoveSubmit = (e) => {
     e.preventDefault()
-
+    console.log(toBeRemoved)
+    dispatch(removeSong(toBeRemoved))
+    closeRemoveModal()
+    window.location.reload()
   }
 
   // Open/close modals
@@ -84,20 +94,26 @@ function Home() {
   }
   const closeRemoveModal = () => setRemoveModalIsOpen(false)
 
+  const handleChange = (e) => {
+    setToBeRemoved(e.target.value)
+  }
+
   useEffect(() => {
-    console.log(user.email)
-    const userInfo = {
-      email: user.email
-    }
-    dispatch(getRepertoire(userInfo))
-  })
+    // useEffect does NOT run again after the modal opens (which is controlled by add/removeModalIsOpen state)
+    dispatch(getSongsByUser(user._id))
+  }, [])
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return (
     <>
       <h1 style={{ fontSize: 40 }}>Your Repertoire</h1>
-      {songList.map((song) => (
-        <SongComponent key={song.id} songItem={song} />
+      {songList && songList.map((song) => (
+        <SongComponent key={song._id} songItem={song} />
       ))}
+
       <br />
       <div className='flex flex-row justify-between'>
         <Fab color="primary" aria-label="add" onClick={openAddModal}>
@@ -129,9 +145,29 @@ function Home() {
 
       {/* removeModal */}
       <Modal isOpen={removeModalIsOpen} onRequestClose={closeRemoveModal} style={customStyles} contentLabel='Add a Song to Repertoire'>
-        <h2>Remove a Song from your Repertoire</h2>
-        <button onClick={closeRemoveModal} className="btn-close">X</button>
-
+        <div className='flex flex-row justify-between'>
+          <h2>Remove a Song from your Repertoire</h2>
+          <button onClick={closeRemoveModal} className="btn-close">X</button>
+        </div>
+        <br />
+        <form onSubmit={handleRemoveSubmit}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Song</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Song"
+              value={toBeRemoved}
+              onChange={handleChange}
+            >
+              {songList && songList.map((song) => (
+                <MenuItem key={song._id} value={song._id}>{song.title}</MenuItem>
+              ))}
+            </Select>
+            <br />
+            <Button type='submit' variant="outlined" style={{ width: '100%' }}>Remove</Button>
+          </FormControl>
+        </form>
       </Modal>
 
     </>

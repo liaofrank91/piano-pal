@@ -6,6 +6,7 @@ const user = JSON.parse(localStorage.getItem('user'))
 
 const initialState = {
     repertoireList: null,
+    triggerGetRepertoireSongs: false,
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -45,6 +46,9 @@ export const removeFromRepertoire = createAsyncThunk('repertoire/remove', async 
     // }
 })
 
+export const randomFunction = () => console.log('hi')
+
+
 export const repertoireSlice = createSlice({
     name: 'repertoire',
     initialState,
@@ -67,6 +71,8 @@ export const repertoireSlice = createSlice({
                 state.isLoading = false
                 state.isSuccess = true
                 state.repertoireList = action.payload.songIdArray
+                state.triggerGetRepertoireSongs = true
+                // ^ this kicks off step 2
             })
 
     }

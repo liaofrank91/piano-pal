@@ -22,17 +22,12 @@ const addToRepertoire = async (songData) => {
 
 // Get repertoire
 const getRepertoire = async (repertoireData) => {
-    console.log('before')
-    console.log(repertoireData.email)
     // Something goes wrong with the next line
     const repertoireResponse = await axios.get(REPERTOIRE_API_URL + 'get', {
         headers: {
             'email': repertoireData.email
         }
     })
-    console.log('after')
-    console.log(repertoireResponse.data)
-
     return repertoireResponse.data
 
 }

@@ -15,11 +15,12 @@ function SongComponent({ songItem }) {
                 </div>
 
                 <div className='progress-section flex flex-row items-center'>
-                    <CircularProgress className='mt-1 mb-1' variant="determinate" value={73} size={35} />
+                    <CircularProgress className='mt-1 mb-1' variant="determinate" value={67} size={35} color={'primary'}/>
+                    {/* Change colour from primary -> success if we hit 100% */}
                 </div>
 
                 <button type='button' className='select-song-button'>
-                    <BsArrowRightCircle size={30} className='mr-3' onClick={() => navigate(`/song/${songItem.id}`)} />
+                    <BsArrowRightCircle size={30} className='mr-3' onClick={() => navigate(`/song/${songItem._id}`)} />
                 </button>
 
             </section>
