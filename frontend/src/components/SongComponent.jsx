@@ -1,10 +1,34 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { BsArrowRightCircle } from "react-icons/bs"
 import CircularProgress from '@mui/material/CircularProgress'
 
 function SongComponent({ songItem }) {
 
     const navigate = useNavigate()
+
+    const checkForExistingPracticeToday = () => {
+        let exists = false
+        let index = null
+
+        if (!songItem) {
+            toast.error("Woah slow down buddy")
+        }
+
+        songItem.practiceTime.forEach((song, i) => {
+            if (song.date === (new Date().toLocaleDateString('en-CA'))) {
+                exists = true
+                index = i
+            }
+        })
+
+        if (exists) {
+            return index
+        } else {
+            return null
+        }
+    }
 
     return (
         <>
@@ -15,8 +39,9 @@ function SongComponent({ songItem }) {
                 </div>
 
                 <div className='progress-section flex flex-row items-center'>
-                    <CircularProgress className='mt-1 mb-1' variant="determinate" value={67} size={35} color={'primary'}/>
+                    <CircularProgress className='mt-1 mb-1' variant="determinate" value={(checkForExistingPracticeToday() ? Math.min((songItem.practiceTime[checkForExistingPracticeToday()].timeAchieved / songItem.practiceTimeGoal * 100), 100) : 0)} size={35} color={'primary'} />
                     {/* Change colour from primary -> success if we hit 100% */}
+                    <h4>&nbsp; Today: {(checkForExistingPracticeToday() ? Math.min(Math.round(songItem.practiceTime[checkForExistingPracticeToday()].timeAchieved / songItem.practiceTimeGoal * 100), 100) : 0)}%</h4>
                 </div>
 
                 <button type='button' className='select-song-button'>

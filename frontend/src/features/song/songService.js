@@ -27,10 +27,29 @@ const getSong = async (songId) => {
     return response.data
 }
 
+// Update a song's practiceTime array when the user HASN'T already practiced today
+const newPractice = async () => {
+
+}
+
+
+// Update a song's practiceTime array when the user HAS already practiced today
+const existingPractice = async (songId, minsToAdd, index) => {
+    const response = await axios.put(SONGS_API_URL + 'update/existingPractice', {
+        songId,
+        minsToAdd,
+        index
+    })
+    return response.data
+}
+
+
 const songService = {
     getSongsByUser, 
     removeSong,
-    getSong
+    getSong,
+    newPractice,
+    existingPractice
 }
 
 export default songService

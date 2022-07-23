@@ -26,7 +26,7 @@ export const getSongsByUser = createAsyncThunk('songs/getSongsByUser', async (us
 })
 
 // Remove a song
-export const removeSong = createAsyncThunk('songs/removeSong', async(songId, thunkAPI) => {
+export const removeSong = createAsyncThunk('songs/removeSong', async (songId, thunkAPI) => {
     try {
         await songService.removeSong(songId)
     } catch (error) {
@@ -35,9 +35,24 @@ export const removeSong = createAsyncThunk('songs/removeSong', async(songId, thu
 })
 
 // Get a specific song
-export const getSong = createAsyncThunk('songs/getSong', async(songId, thunkAPI) => {
+export const getSong = createAsyncThunk('songs/getSong', async (songId, thunkAPI) => {
     try {
         return await songService.getSong(songId)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// Update a song's practiceTime array when the user HASN'T already practiced today
+
+// Update a song's practiceTime array when the user HAS already practiced today
+export const existingPractice = createAsyncThunk('songs/existingPractice', async (combinedInfo, thunkAPI) => {
+    try {
+        const {songId, minsToAdd, index} = combinedInfo
+        console.log(songId, minsToAdd, index)
+        return await songService.existingPractice(songId, minsToAdd, index)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
 
@@ -59,7 +74,7 @@ export const songSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getSongsByUser.pending, (state,action) => {
+            .addCase(getSongsByUser.pending, (state, action) => {
                 state.isLoading = true
             })
             .addCase(getSongsByUser.fulfilled, (state, action) => {

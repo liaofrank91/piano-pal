@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import SongPage from './pages/SongPage'
 import Spinner from './components/Spinner'
+import Stopwatch from './components/Stopwatch'
 // Material UI typography ///////////
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
@@ -28,6 +29,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/song/:songId' element={<SongPage />} />
+            <Route path='/stopwatch' element={<Stopwatch />} />
 
           </Routes>
 

@@ -1,30 +1,51 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { getSong } from '../features/song/songSlice'
 import LinearProgress from '@mui/material/LinearProgress'
+import Button from '@mui/material/Button'
 import Spinner from '../components/Spinner'
+import Stopwatch from '../components/Stopwatch'
 
 function SongPage() {
-    const [chosenSong, setChosenSong] = useState({})
-
     const { songId } = useParams()
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const { isLoading, isSuccess, specificSong } = useSelector((state) => state.song)
-
-    // USE THIS FORMAT FOR DAYS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    let newDate = new Date().toLocaleDateString('en-CA')  
-    console.log(newDate)
-
-    // ** IF: specificSong exists & there isn't an entry in practiceTime under the current date, just put 0 / whatever
-    // ** IF: specificSong exists & there IS an entry in practiceTime under the current date, use that number / whatever 
-    //////////////////////////////////////////////////////////////////
+    // THOUGHTS ____________________________________________________________________    
+    // after i dispatch(getSong(songId)), the global state's specificSong should be updated, and even after the page re-renders because of a local state change the songId will still be there... right?
 
     useEffect(() => {
         dispatch(getSong(songId))
     }, [])
+
+    // checks if specificSong.practiceTime array has an object with a date field that matches with the current date. returns the index of specificSong.practiceTime that corresponds to the right object if exists, and returns null if not
+    const checkForExistingPracticeToday = () => {
+        let exists = false
+        let index = null
+
+        if (!specificSong) {
+            toast.error("Woah slow down buddy")
+        }
+
+        console.log(specificSong, specificSong.practiceTime)
+        specificSong.practiceTime.forEach((song, i) => {
+            if (song.date === (new Date().toLocaleDateString('en-CA'))) {
+                exists = true
+                index = i
+            }
+        })
+
+        if (exists) {
+            return index
+        } else {
+            return null
+        }
+
+    }
 
     if (isLoading) {
         return <Spinner />
@@ -34,28 +55,37 @@ function SongPage() {
     return (
         <>
             <section>
-                <div>{songId}</div>
+                <Button type='button' onClick={() => navigate('/')} variant="outlined">Home</Button>
+                <br />
+                <br />
                 <h1 style={{ fontSize: 50 }} className='mb-0'>{specificSong && specificSong.title}</h1>
                 <h3 style={{ fontSize: 25, fontStyle: 'italic' }} className='mt-0'>{specificSong && specificSong.composer}</h3>
                 <br />
-                <h2 className='flex flex-row justify-start'>
+                <h2 style={{ fontSize: 20 }} className='flex flex-row justify-start'>
                     Practicing Progress for Today
                 </h2>
-                <LinearProgress variant="determinate" value={70} />
+                <LinearProgress variant="determinate" value={specificSong && (checkForExistingPracticeToday() ? Math.min((specificSong.practiceTime[checkForExistingPracticeToday()].timeAchieved / specificSong.practiceTimeGoal * 100), 100) : 0)} />
                 <h4 style={{ fontStyle: 'italic' }} className='flex flex-row justify-start mt-1'>
-                    <b>xx&nbsp;</b>
+                    <b>{specificSong && (checkForExistingPracticeToday() ? specificSong.practiceTime[checkForExistingPracticeToday()].timeAchieved : 0)}&nbsp;</b>
                     out of&nbsp;
                     <b>{specificSong && specificSong.practiceTimeGoal}&nbsp;</b>
                     minutes achieved today
                 </h4>
-                <div></div>
+                <br /><br />
 
-                <div>
-                    Add a note for tomorrow
+                <div className='stopwatch-part'>
+                    <h2 style={{ fontSize: 20 }} className='flex flex-row justify-start'>Start Practicing!</h2>
+                    <Stopwatch checkFunction={checkForExistingPracticeToday}/>
                 </div>
+                <br /><br />
 
                 <div>
-                    Practicing notes from yesterday
+                    <h2 style={{ fontSize: 20 }} className='flex flex-row justify-start'>Add a Note</h2>                
+                </div>
+                <br /><br />
+
+                <div>
+                    <h2 style={{ fontSize: 20 }} className='flex flex-row justify-start'>Your Notes</h2>                
                 </div>
 
 
