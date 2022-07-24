@@ -2,8 +2,7 @@
 // I've added cosmetic changes & messed around with the reset button to get it to trigger an action in the backend  
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { toast } from 'react-toastify'
-import { existingPractice } from '../features/song/songSlice'
+import { existingPractice, newPractice } from '../features/song/songSlice'
 import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import { GiMusicalNotes } from "react-icons/gi"
@@ -35,17 +34,21 @@ const Stopwatch = ({ checkFunction }) => {
         setRunning(false)
         setTime(0)
         let index = checkFunction()
-        if (index) {
-            // send a put request to modify existing entry (vers 1)
+        if (index !== null) {
+            console.log('dispatching existingpractice')
+            // use existingPractice()
             dispatch(existingPractice({
                 songId: specificSong._id,
                 minsToAdd: timePracticed,
                 index
             }))
-            window.location.reload()
         } else {
-            // send a put request to modify existing entry (vers2 )
-            console.log('hi')
+            console.log('dispatching nexpractice');
+            // use newPractice()
+            dispatch(newPractice({
+                songId: specificSong._id,
+                minsToAdd: timePracticed
+            }))
         }
     }
 

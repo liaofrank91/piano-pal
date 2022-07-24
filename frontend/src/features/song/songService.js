@@ -28,8 +28,12 @@ const getSong = async (songId) => {
 }
 
 // Update a song's practiceTime array when the user HASN'T already practiced today
-const newPractice = async () => {
-
+const newPractice = async (songId, minsToAdd) => {
+    const response = await axios.put(SONGS_API_URL + 'update/newPractice', {
+        songId,
+        minsToAdd
+    })
+    return response.data
 }
 
 

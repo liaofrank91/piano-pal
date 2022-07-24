@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { getSong } from '../features/song/songSlice'
+import { getSong, reset } from '../features/song/songSlice'
 import LinearProgress from '@mui/material/LinearProgress'
 import Button from '@mui/material/Button'
 import Spinner from '../components/Spinner'
@@ -20,6 +20,10 @@ function SongPage() {
 
     useEffect(() => {
         dispatch(getSong(songId))
+
+        return () => {
+            dispatch(reset())
+        }
     }, [])
 
     // checks if specificSong.practiceTime array has an object with a date field that matches with the current date. returns the index of specificSong.practiceTime that corresponds to the right object if exists, and returns null if not
@@ -31,7 +35,6 @@ function SongPage() {
             toast.error("Woah slow down buddy")
         }
 
-        console.log(specificSong, specificSong.practiceTime)
         specificSong.practiceTime.forEach((song, i) => {
             if (song.date === (new Date().toLocaleDateString('en-CA'))) {
                 exists = true
@@ -40,8 +43,10 @@ function SongPage() {
         })
 
         if (exists) {
+            console.log('found')
             return index
         } else {
+            console.log('not found')
             return null
         }
 
@@ -64,9 +69,9 @@ function SongPage() {
                 <h2 style={{ fontSize: 20 }} className='flex flex-row justify-start'>
                     Practicing Progress for Today
                 </h2>
-                <LinearProgress variant="determinate" value={specificSong && (checkForExistingPracticeToday() ? Math.min((specificSong.practiceTime[checkForExistingPracticeToday()].timeAchieved / specificSong.practiceTimeGoal * 100), 100) : 0)} />
+                <LinearProgress variant="determinate" value={specificSong && (checkForExistingPracticeToday() !== null ? Math.min((specificSong.practiceTime[checkForExistingPracticeToday()].timeAchieved / specificSong.practiceTimeGoal * 100), 100) : 0)} />
                 <h4 style={{ fontStyle: 'italic' }} className='flex flex-row justify-start mt-1'>
-                    <b>{specificSong && (checkForExistingPracticeToday() ? specificSong.practiceTime[checkForExistingPracticeToday()].timeAchieved : 0)}&nbsp;</b>
+                    <b>{specificSong && (checkForExistingPracticeToday() !== null ? specificSong.practiceTime[checkForExistingPracticeToday()].timeAchieved : 0)}&nbsp;</b>
                     out of&nbsp;
                     <b>{specificSong && specificSong.practiceTimeGoal}&nbsp;</b>
                     minutes achieved today
@@ -74,7 +79,7 @@ function SongPage() {
                 <br /><br />
 
                 <div className='stopwatch-part'>
-                    <h2 style={{ fontSize: 20 }} className='flex flex-row justify-start'>Start Practicing!</h2>
+                    <h2 style={{ fontSize: 20 }} className='flex flex-row justify-start'>Log Practice Times!</h2>
                     <Stopwatch checkFunction={checkForExistingPracticeToday}/>
                 </div>
                 <br /><br />

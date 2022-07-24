@@ -46,11 +46,22 @@ export const getSong = createAsyncThunk('songs/getSong', async (songId, thunkAPI
 })
 
 // Update a song's practiceTime array when the user HASN'T already practiced today
+export const newPractice = createAsyncThunk('songs/newPractice', async (combinedInfo, thunkAPI) => {
+    try {
+        const { songId, minsToAdd } = combinedInfo
+        console.log(songId, minsToAdd)
+        return await songService.newPractice(songId, minsToAdd)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+
+        return thunkAPI.rejectWithValue(message)
+    }
+})
 
 // Update a song's practiceTime array when the user HAS already practiced today
 export const existingPractice = createAsyncThunk('songs/existingPractice', async (combinedInfo, thunkAPI) => {
     try {
-        const {songId, minsToAdd, index} = combinedInfo
+        const { songId, minsToAdd, index } = combinedInfo
         console.log(songId, minsToAdd, index)
         return await songService.existingPractice(songId, minsToAdd, index)
     } catch (error) {
@@ -66,6 +77,7 @@ export const songSlice = createSlice({
     initialState,
     reducers: {
         reset: (state) => {
+            state.specificSong = null
             state.isLoading = false
             state.isError = false
             state.isSuccess = false
@@ -78,8 +90,8 @@ export const songSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(getSongsByUser.fulfilled, (state, action) => {
-                state.songList = action.payload
                 state.isLoading = false
+                state.songList = action.payload
             })
             .addCase(getSong.pending, (state, action) => {
                 state.isLoading = true
@@ -88,6 +100,20 @@ export const songSlice = createSlice({
                 state.specificSong = action.payload
                 state.isLoading = false
                 state.isSuccess = true
+            })
+            .addCase(existingPractice.pending, (state, action) => {
+                // state.specificSong = null
+            })
+            .addCase(existingPractice.fulfilled, (state, action) => {
+                state.isSuccess = true 
+                state.specificSong = action.payload
+            })
+            .addCase(newPractice.pending, (state, action) => {
+                // state.specificSong = null
+            })
+            .addCase(newPractice.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.specificSong = action.payload
             })
     }
 })

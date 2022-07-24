@@ -106,7 +106,29 @@ const getSong = asyncHandler(async (req, res) => {
 // @route   /api/songs/update/newPractice
 // @access  Public
 const newPractice = asyncHandler(async (req, res) => {
+    const { songId, minsToAdd } = req.body
     
+    if (!songId) {
+        res.status(400)
+        throw new Error("Please include the songId")
+    }
+
+    const song = await Song.findOne({ _id: songId})
+
+    if (!song) {
+        res.status(400)
+        throw new Error('something went wrong')
+    } else {
+        song.practiceTime.unshift(
+            {
+                date: new Date().toLocaleDateString('en-CA'),
+                timeAchieved: minsToAdd 
+            }
+        )
+        await song.save()
+        res.status(200).json(song)
+    }
+
 })
 
 
