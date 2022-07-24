@@ -178,6 +178,54 @@ const updatePracticeTimeGoal = asyncHandler(async (req, res) => {
     }
 })
 
+// @desc    Add a note to a song 
+// @route   /api/songs/addNote
+// @access  Public
+const addNote = asyncHandler(async (req, res) => {
+    const { songId, note } = req.body
+
+    if (!songId) {
+        res.status(400)
+        throw new Error("Please include the songId")
+    }
+
+    const song = await Song.findOne({ _id: songId })
+
+    if (!song) {
+        res.status(400)
+        throw new Error('something went wrong')
+    } else {
+        song.notes.unshift(note)
+        await song.save()
+        res.status(200).json(song)
+    }
+})
+
+// @desc    Delete a note from a song 
+// @route   /api/songs/deleteNote
+// @access  Public
+const deleteNote = asyncHandler(async (req, res) => {
+    const { songId, noteId } = req.body
+
+    if (!songId) {
+        res.status(400)
+        throw new Error("Please include the songId")
+    }
+
+    const song = await Song.findOne({ _id: songId })
+
+    if (!song) {
+        res.status(400)
+        throw new Error('something went wrong')
+    } else {
+        song.notes.forEach((note) => console.log('Note Id: ', note._id))
+        song.notes = song.notes.filter((note) => (note._id.valueOf() !== noteId))
+        console.log(song.notes.length)
+        console.log('62dd66e649946d8c4729526d' === '62dd66e649946d8c4729526d')
+        await song.save()
+        res.status(200).json(song)
+    }
+})
 
 module.exports = {
         createSong,
@@ -186,5 +234,7 @@ module.exports = {
         getSong,
         newPractice,
         existingPractice,
-        updatePracticeTimeGoal
+        updatePracticeTimeGoal,
+        addNote,
+        deleteNote
     }

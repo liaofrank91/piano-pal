@@ -57,7 +57,7 @@ function Home() {
   }
 
   const handleAddSubmit = (e) => {
-    // e.preventDefault()
+    e.preventDefault()
 
     if (addForm.practiceTimeGoal <= 0) {
       toast.error('Please enter a valid practice goal')

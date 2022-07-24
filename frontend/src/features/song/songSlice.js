@@ -1,5 +1,6 @@
 import { create } from '@mui/material/styles/createTransitions'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { GiTrousers } from 'react-icons/gi'
 import songService from './songService'
 
 // Get user from localStorage
@@ -84,6 +85,32 @@ export const updatePracticeTimeGoal = createAsyncThunk('songs/updateGoal', async
     }
 })
 
+// Add a note to a song
+export const addNote = createAsyncThunk('songs/addNote', async (combinedInfo, thunkAPI) => {
+    try {
+        const { songId, note } = combinedInfo
+        console.log(songId, note)
+        return await songService.addNote(songId, note)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// Delete a note from a song
+export const deleteNote = createAsyncThunk('songs/deleteNote', async (combinedInfo, thunkAPI) => {
+    try {
+        const { songId, noteId } = combinedInfo
+        console.log(songId, noteId)
+        return await songService.deleteNote(songId, noteId)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 export const songSlice = createSlice({
     name: 'song',
@@ -104,6 +131,7 @@ export const songSlice = createSlice({
             })
             .addCase(getSongsByUser.fulfilled, (state, action) => {
                 state.isLoading = false
+                state.isSuccess = true
                 state.songList = action.payload
             })
             .addCase(getSong.pending, (state, action) => {
@@ -129,6 +157,14 @@ export const songSlice = createSlice({
                 state.specificSong = action.payload
             })
             .addCase(updatePracticeTimeGoal.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.specificSong = action.payload
+            })
+            .addCase(addNote.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.specificSong = action.payload
+            })
+            .addCase(deleteNote.fulfilled, (state, action) => {
                 state.isSuccess = true
                 state.specificSong = action.payload
             })

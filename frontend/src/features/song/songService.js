@@ -47,10 +47,27 @@ const existingPractice = async (songId, minsToAdd, index) => {
     return response.data
 }
 
+// Update a song's practiceTimeGoal
 const updatePracticeTimeGoal = async (songId, newGoal) => {
     const response = await axios.put(SONGS_API_URL + 'update/practiceTimeGoal', {
         songId,
-        newGoal,
+        newGoal
+    })
+    return response.data
+}
+
+const addNote = async (songId, note) => {
+    const response = await axios.put(SONGS_API_URL + 'addNote', {
+        songId,
+        note
+    })
+    return response.data
+}
+
+const deleteNote = async (songId, noteId) => {
+    const response = await axios.put(SONGS_API_URL + 'deleteNote', {
+        songId,
+        noteId
     })
     return response.data
 }
@@ -61,7 +78,9 @@ const songService = {
     getSong,
     newPractice,
     existingPractice,
-    updatePracticeTimeGoal
+    updatePracticeTimeGoal,
+    addNote,
+    deleteNote
 }
 
 export default songService
