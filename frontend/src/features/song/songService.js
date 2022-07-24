@@ -47,13 +47,21 @@ const existingPractice = async (songId, minsToAdd, index) => {
     return response.data
 }
 
+const updatePracticeTimeGoal = async (songId, newGoal) => {
+    const response = await axios.put(SONGS_API_URL + 'update/practiceTimeGoal', {
+        songId,
+        newGoal,
+    })
+    return response.data
+}
 
 const songService = {
     getSongsByUser, 
     removeSong,
     getSong,
     newPractice,
-    existingPractice
+    existingPractice,
+    updatePracticeTimeGoal
 }
 
 export default songService

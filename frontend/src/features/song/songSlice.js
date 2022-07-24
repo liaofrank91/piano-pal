@@ -71,6 +71,19 @@ export const existingPractice = createAsyncThunk('songs/existingPractice', async
     }
 })
 
+// Update a song's practiceTimeGoal
+export const updatePracticeTimeGoal = createAsyncThunk('songs/updateGoal', async (combinedInfo, thunkAPI) => {
+    try {
+        const { songId, newGoal } = combinedInfo
+        console.log(songId, newGoal)
+        return await songService.updatePracticeTimeGoal(songId, newGoal)
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 
 export const songSlice = createSlice({
     name: 'song',
@@ -105,13 +118,17 @@ export const songSlice = createSlice({
                 // state.specificSong = null
             })
             .addCase(existingPractice.fulfilled, (state, action) => {
-                state.isSuccess = true 
+                state.isSuccess = true
                 state.specificSong = action.payload
             })
             .addCase(newPractice.pending, (state, action) => {
                 // state.specificSong = null
             })
             .addCase(newPractice.fulfilled, (state, action) => {
+                state.isSuccess = true
+                state.specificSong = action.payload
+            })
+            .addCase(updatePracticeTimeGoal.fulfilled, (state, action) => {
                 state.isSuccess = true
                 state.specificSong = action.payload
             })

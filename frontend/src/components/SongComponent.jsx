@@ -30,6 +30,11 @@ function SongComponent({ songItem }) {
             return null
         }
     }
+    
+    let existingPracticeToday = null
+    if (songItem) {
+        existingPracticeToday = checkForExistingPracticeToday()
+    }
 
     return (
         <>
@@ -40,10 +45,10 @@ function SongComponent({ songItem }) {
                 </div>
 
                 <div className='progress-section flex flex-row items-center'>
-                    <CircularProgress className='mt-1 mb-1' variant="determinate" value={(checkForExistingPracticeToday() !== null ? Math.min((songItem.practiceTime[checkForExistingPracticeToday()].timeAchieved / songItem.practiceTimeGoal * 100), 100) : 0)} size={35} color={'primary'} />
+                    <CircularProgress className='mt-1 mb-1' variant="determinate" value={(existingPracticeToday !== null ? Math.min((songItem.practiceTime[existingPracticeToday].timeAchieved / songItem.practiceTimeGoal * 100), 100) : 0)} size={35} color={'primary'} />
                     {/* Change colour from primary -> success if we hit 100% */}
-                    <h4>&nbsp; Today: {(checkForExistingPracticeToday() !== null ? Math.min(Math.round(songItem.practiceTime[checkForExistingPracticeToday()].timeAchieved / songItem.practiceTimeGoal * 100), 100) : 0)}%&nbsp;&nbsp;&nbsp;</h4>
-                    {(checkForExistingPracticeToday() !== null && songItem.practiceTime[checkForExistingPracticeToday()].timeAchieved >= songItem.practiceTimeGoal) ? <DoneOutlineIcon /> : <></>}
+                    <h4>&nbsp; Today: {(existingPracticeToday !== null ? Math.min(Math.round(songItem.practiceTime[existingPracticeToday].timeAchieved / songItem.practiceTimeGoal * 100), 100) : 0)}%&nbsp;&nbsp;&nbsp;</h4>
+                    {(existingPracticeToday !== null && songItem.practiceTime[existingPracticeToday].timeAchieved >= songItem.practiceTimeGoal) ? <DoneOutlineIcon /> : <></>}
                 </div>
 
                 <button type='button' className='select-song-button'>

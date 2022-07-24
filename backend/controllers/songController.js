@@ -155,6 +155,29 @@ const existingPractice = asyncHandler(async (req, res) => {
     }
 })
 
+// @desc    Update a song's practiceTimeGoal 
+// @route   /api/songs/update/practiceTimeGoal
+// @access  Public
+const updatePracticeTimeGoal = asyncHandler(async (req, res) => {
+    const { songId, newGoal } = req.body
+
+    if (!songId) {
+        res.status(400)
+        throw new Error("Please include the songId")
+    }
+
+    const song = await Song.findOne({ _id: songId })
+
+    if (!song) {
+        res.status(400)
+        throw new Error('something went wrong')
+    } else {
+        song.practiceTimeGoal = newGoal
+        await song.save()
+        res.status(200).json(song)
+    }
+})
+
 
 module.exports = {
         createSong,
@@ -162,5 +185,6 @@ module.exports = {
         removeSong,
         getSong,
         newPractice,
-        existingPractice
+        existingPractice,
+        updatePracticeTimeGoal
     }
