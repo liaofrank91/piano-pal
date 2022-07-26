@@ -23,7 +23,6 @@ const removeSong = async (songId) => {
 // Get a specific song
 const getSong = async (songId) => {
     const response = await axios.get(SONGS_API_URL + 'get/' + songId)
-    console.log(response.data)
     return response.data
 }
 

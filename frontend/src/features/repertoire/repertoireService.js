@@ -15,7 +15,6 @@ const addToRepertoire = async (songData) => {
         newSongId: songResponse.data._id,
         email: songData.email
     }
-    console.log(songResponse.data._id, songData.email)
     const response = await axios.put(REPERTOIRE_API_URL + 'add', addToRepertoireInfo)
     return response.data
 }

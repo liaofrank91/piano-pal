@@ -40,7 +40,6 @@ const createRepertoire = asyncHandler(async (req, res) => {
 // @access  Public
 const getRepertoire = asyncHandler(async (req, res) => {
     const email = req.get('email')
-    console.log(email, 'got it?')
 
     // Check if the user information is present
     if (!email) {
@@ -51,7 +50,6 @@ const getRepertoire = asyncHandler(async (req, res) => {
     const repertoire = await Repertoire.findOne({ email })
 
     if (repertoire) {
-        console.log(repertoire)
         res.status(201).json({
             _id: repertoire._id,
             email: repertoire.email,
@@ -76,7 +74,6 @@ const addToRepertoire = asyncHandler(async (req, res) => {
 
     // Find the right repertoire object
     const repertoire = await Repertoire.findOne({ email })
-    console.log(repertoire)
     // Note down what's currently in the repertoire's songIdArray 
     const newSongIdArray = repertoire.songIdArray
 

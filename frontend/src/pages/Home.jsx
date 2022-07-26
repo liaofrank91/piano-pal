@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
 import { useSelector, useDispatch } from 'react-redux'
-import { addToRepertoire, getRepertoire } from '../features/repertoire/repertoireSlice'
+import { addToRepertoire } from '../features/repertoire/repertoireSlice'
 import { getSongsByUser, removeSong } from '../features/song/songSlice'
 import SongComponent from '../components/SongComponent'
 import Button from '@mui/material/Button'
@@ -44,7 +43,6 @@ function Home() {
   const [toBeRemoved, setToBeRemoved] = useState('')
 
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const { user } = useSelector((state) => state.auth)
   const { songList, isLoading } = useSelector((state) => state.song)
@@ -76,7 +74,6 @@ function Home() {
 
   const handleRemoveSubmit = (e) => {
     e.preventDefault()
-    console.log(toBeRemoved)
     dispatch(removeSong(toBeRemoved))
     closeRemoveModal()
     window.location.reload()
@@ -101,6 +98,7 @@ function Home() {
   useEffect(() => {
     // useEffect does NOT run again after the modal opens (which is controlled by add/removeModalIsOpen state)
     dispatch(getSongsByUser(user._id))
+    // eslint-disable-next-line
   }, [])
 
   if (isLoading) {

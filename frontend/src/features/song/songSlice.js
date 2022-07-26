@@ -1,10 +1,5 @@
-import { create } from '@mui/material/styles/createTransitions'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { GiTrousers } from 'react-icons/gi'
 import songService from './songService'
-
-// Get user from localStorage
-const user = JSON.parse(localStorage.getItem('user'))
 
 const initialState = {
     songList: null,
@@ -50,7 +45,6 @@ export const getSong = createAsyncThunk('songs/getSong', async (songId, thunkAPI
 export const newPractice = createAsyncThunk('songs/newPractice', async (combinedInfo, thunkAPI) => {
     try {
         const { songId, minsToAdd } = combinedInfo
-        console.log(songId, minsToAdd)
         return await songService.newPractice(songId, minsToAdd)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -63,7 +57,6 @@ export const newPractice = createAsyncThunk('songs/newPractice', async (combined
 export const existingPractice = createAsyncThunk('songs/existingPractice', async (combinedInfo, thunkAPI) => {
     try {
         const { songId, minsToAdd, index } = combinedInfo
-        console.log(songId, minsToAdd, index)
         return await songService.existingPractice(songId, minsToAdd, index)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -76,7 +69,6 @@ export const existingPractice = createAsyncThunk('songs/existingPractice', async
 export const updatePracticeTimeGoal = createAsyncThunk('songs/updateGoal', async (combinedInfo, thunkAPI) => {
     try {
         const { songId, newGoal } = combinedInfo
-        console.log(songId, newGoal)
         return await songService.updatePracticeTimeGoal(songId, newGoal)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -89,7 +81,6 @@ export const updatePracticeTimeGoal = createAsyncThunk('songs/updateGoal', async
 export const addNote = createAsyncThunk('songs/addNote', async (combinedInfo, thunkAPI) => {
     try {
         const { songId, note } = combinedInfo
-        console.log(songId, note)
         return await songService.addNote(songId, note)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -102,7 +93,6 @@ export const addNote = createAsyncThunk('songs/addNote', async (combinedInfo, th
 export const deleteNote = createAsyncThunk('songs/deleteNote', async (combinedInfo, thunkAPI) => {
     try {
         const { songId, noteId } = combinedInfo
-        console.log(songId, noteId)
         return await songService.deleteNote(songId, noteId)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()

@@ -30,12 +30,10 @@ const Stopwatch = ({ checkFunction }) => {
 
     const handleSubmit = () => {
         const timePracticed = Math.round(time / 60000)
-        console.log(timePracticed)
         setRunning(false)
         setTime(0)
         let index = checkFunction()
         if (index !== null) {
-            console.log('dispatching existingpractice')
             // use existingPractice()
             dispatch(existingPractice({
                 songId: specificSong._id,
@@ -43,7 +41,6 @@ const Stopwatch = ({ checkFunction }) => {
                 index
             }))
         } else {
-            console.log('dispatching nexpractice');
             // use newPractice()
             dispatch(newPractice({
                 songId: specificSong._id,

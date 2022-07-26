@@ -1,9 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import repertoireService from './repertoireService'
 
-// Get user from localStorage
-const user = JSON.parse(localStorage.getItem('user'))
-
 const initialState = {
     repertoireList: null,
     triggerGetRepertoireSongs: false,
@@ -45,8 +42,6 @@ export const removeFromRepertoire = createAsyncThunk('repertoire/remove', async 
     //     return thunkAPI.rejectWithValue(message)
     // }
 })
-
-export const randomFunction = () => console.log('hi')
 
 
 export const repertoireSlice = createSlice({

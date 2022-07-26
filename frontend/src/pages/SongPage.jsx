@@ -47,7 +47,7 @@ function SongPage() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const { isLoading, isSuccess, specificSong } = useSelector((state) => state.song)
+    const { isLoading, specificSong } = useSelector((state) => state.song)
     // THOUGHTS ____________________________________________________________________    
     // after i dispatch(getSong(songId)), the global state's specificSong should be updated, and even after the page re-renders because of a local state change the songId will still be there... right?
 
@@ -57,6 +57,7 @@ function SongPage() {
         return () => {
             dispatch(reset())
         }
+        // eslint-disable-next-line
     }, [])
 
     // checks if specificSong.practiceTime array has an object with a date field that matches with the current date. returns the index of specificSong.practiceTime that corresponds to the right object if exists, and returns null if not
@@ -76,10 +77,8 @@ function SongPage() {
         })
 
         if (exists) {
-            // console.log('found')
             return index
         } else {
-            console.log('not found')
             return null
         }
 
@@ -88,7 +87,6 @@ function SongPage() {
     let existingPracticeToday = null
     if (specificSong) {
         existingPracticeToday = checkForExistingPracticeToday()
-        console.log(existingPracticeToday)
     }
 
     const handleUpdate = (e) => {

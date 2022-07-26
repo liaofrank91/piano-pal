@@ -218,10 +218,7 @@ const deleteNote = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('something went wrong')
     } else {
-        song.notes.forEach((note) => console.log('Note Id: ', note._id))
         song.notes = song.notes.filter((note) => (note._id.valueOf() !== noteId))
-        console.log(song.notes.length)
-        console.log('62dd66e649946d8c4729526d' === '62dd66e649946d8c4729526d')
         await song.save()
         res.status(200).json(song)
     }
