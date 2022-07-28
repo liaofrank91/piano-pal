@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { BsArrowRightCircle } from "react-icons/bs"
@@ -41,7 +40,8 @@ function SongComponent({ songItem }) {
             <section className='flex flex-row justify-between items-center border-2 border-black m-3'>
                 <div className='song-information flex flex-row' style={{ minWidth: '25vw' }}>
                     <h3 className='mt-2 ml-3'>{songItem.title}&nbsp;</h3>
-                    <h4 className='mt-2'>by {songItem.composer}</h4>
+                    <h4 className='mt-2'>by&nbsp;</h4>
+                    <h4 className='mt-2' style={{fontStyle: 'italic'}}>{songItem.composer}</h4>
                 </div>
 
                 <div className='progress-section flex flex-row items-center'>
