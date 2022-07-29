@@ -1,4 +1,4 @@
 # practice-assistant-app
 simple app to help me meet my daily goals for piano
 
-https://practice-assistant-app.herokuapp.com/
+Deployed with Heroku: https://practice-assistant-app.herokuapp.com/
